@@ -32,7 +32,7 @@ require_once("user_header.php");
             <div class="top_menu">
                 <div class="container">
                     <div class="float-left">
-                        <a href="#">Wednesday, March 14, 2018</a>
+                        <a href="#"><?php echo $today;?></a>
                     </div>
                     <div class="float-right">
                         <ul class="list header_social">

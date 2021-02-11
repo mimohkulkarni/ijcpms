@@ -30,10 +30,44 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
               integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/68c66954a3.js" crossorigin="anonymous"></script>
+        
+        <!-- Optional JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        
         <!-- Main css -->
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
+        <style>
+        @keyframes slideInFromLeft {
+  0% {
+    transform: rotate(0deg);
+  }
+  25%{
+      transform: rotate(15deg);
+  }
+  50%{
+      transform: rotate(-15deg);
+  }
+  70%{
+      transform: rotate(10deg);
+  }
+  90%{
+      transform: rotate(-5deg);
+  }
+  100% {
+    transform: translateX(0);
+    transform: translateY(0);
+  }
+}
+
+img {  
+  /* This section calls the slideInFromLeft animation we defined above */
+  animation: 1.5s ease-in 0s 1 slideInFromLeft;
+}
+        </style>
     </head>
     <body>
 
@@ -140,7 +174,7 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
         <section class="news_area p_100">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-9">
                         <div class="main_title2">
                             <h2>Editorial Board</h2>
                         </div>
@@ -148,9 +182,9 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
                             <div class="row">
                                 <div class="col-lg-2"></div>
                                 <div class="col-lg-8 text-center">
-                                    <img src="img/files/abc.jpg" width="150px">
+                                    <img src="img/files/pdc_photo.jpg" width="150px">
                                     <h4 class="text-info pt-3" style="text-decoration: underline">Editorial In Chief</h4>
-                                    <h4 class="text-default pt-1">Editorial Name</h4>
+                                    <h4 class="text-default pt-1">Dr. Praveen D. Chaudhari</h4>
                                 </div>
                                 <div class="col-lg-2"></div>
                             </div>
@@ -158,7 +192,7 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
                             <div class="row mt-2">
                                 <div class="col-lg-2"></div>
                                 <div class="col-lg-8 text-center">
-                                    <img src="img/abc.jpg" width="150px">
+                                    <img src="img/files/pdc_photo.jpg" width="150px">
                                     <h4 class="text-info pt-3" style="text-decoration: underline">Assosiate Editor</h4>
                                     <h4 class="text-default pt-1">Editorial Name</h4>
                                 </div>
@@ -167,13 +201,15 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
                             <hr>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
-                                    <table class="table table-bordered table-hover text-center">
+                                    <?php if(mysqli_num_rows($resultEditor) > 0){ ?>
+                                    <table class="table table-bordered table-hover text-center table-middle">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th class=" align-middle" style="min-width: 70px">Sr No</th>
-                                                <th class=" align-middle">Editor Name</th>
-                                                <th class=" align-middle">Designation</th>
-                                                <th class=" align-middle">Email</th>
+                                                <th class="align-middle" style="min-width: 70px">Sr No</th>
+                                                <th class="align-middle">Image</th>
+                                                <th class="align-middle">Editor Name</th>
+                                                <th class="align-middle">Designation</th>
+                                                <th class="align-middle">Email</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -182,6 +218,7 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
                                             while($rowEditor = mysqli_fetch_array($resultEditor)){
                                                 echo "<tr>";
                                                 echo "<td>".$i++."</td>";
+                                                echo "<td><img src='assets/img/".$rowEditor['img']."' alt='No Image' width='100' /></td>";
                                                 echo "<td>".$rowEditor['name']."</td>";
                                                 echo "<td>".$rowEditor['desg']."</td>";
                                                 echo "<td>".$rowEditor['email']."</td>";
@@ -190,11 +227,12 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
                                         ?>
                                         </tbody>
                                     </table>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="right_sidebar">
                             <aside class="r_widgets social_widgets">
                                 <div class="main_title2">
@@ -203,7 +241,7 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
                                 <ul class="list">
                                     <li><a href="#"><i class="fa fa-envelope"></i> Total Issues <span><?php echo $totalIssues;?></span></a></li>
                                     <li><a href="#"><i class="fa fa-bookmark"></i> Total Articles <span><?php echo $totalArticles; ?></span></a></li>
-                                    <li><a href="#"><i class="fa fa-upload"></i> Current Issue <span><?php echo date("M-Y",strtotime($currentDate));?></span></a></li>
+                                    <li><a href="#"><i class="fa fa-upload"></i> Current Issue <span><?php echo (trim($currentDate) != "00-00-0000") ? date("M-Y",strtotime($currentDate)) : 'NA';?></span></a></li>
                                     <li><a href="#"><i class="fa fa-file-download"></i> Download Score <span><?php echo $dcount;?></span></a></li>
                                 </ul>
                             </aside>
@@ -277,9 +315,5 @@ $resultEditor = mysqli_query($linkId,$sqlEditor);
         </footer>
         <!--============= End footer Area  ==============-->
 
-        <!-- Optional JavaScript -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     </body>
 </html>

@@ -98,7 +98,7 @@ if (isset($_POST['submit'])){
 
 //                $abc = 'submissions/'.$sha_filename.".".$ext;
 //                echo "<script>alert($abc);</script>";
-//                echo "abc-".$abc;
+            //    echo $sqlSubmission;
 
                 mysqli_query($linkId,$sqlSubmission);
                 if (mysqli_affected_rows($linkId) == 1){
@@ -177,7 +177,8 @@ if (isset($_POST['submit'])){
                     $file = "";
                 }
                 else{
-                    unlink('/assets/submissions'.DIRECTORY_SEPARATOR.$_FILES['articleFile']['tmp_name']);
+                    if(file_exists("/assets/submissions/".$sha_filename.".".$ext))
+                        unlink('/assets/submissions/'.$sha_filename.".".$ext);
                     $file = "";
                     throw new RuntimeException('Unknown error.');
                 }
@@ -284,7 +285,7 @@ if (isset($_POST['submit'])){
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <a class="dropdown-item" href="aboutus.php">About Us</a>
-                                            <a class="dropdown-item" href="page_404.php">Editorial Board</a>
+                                            <a class="dropdown-item" href="editorial.php">Editorial Board</a>
                                         </div>
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="guidelines.php">Guidelines</a></li>

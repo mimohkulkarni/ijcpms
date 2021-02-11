@@ -52,23 +52,19 @@ $totalIssues = mysqli_affected_rows($linkId);
     <body>
 
     <!--================Header Area =================-->
-    <header class="header_area" style="background: #222222; margin-bottom: 20px">
+    <header class="admin_header">
         <div class="logo_part">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-1">
-                        <div class="float-left">
-                            <a class="logo" href="#"><img src="img/favicon.png" alt=""></a>
-                        </div>
+                    <div class="col-sm-2 d-flex justify-content-center align-items-center">
+                            <a class="logo" href="index.php"><img src="img/logo.png" alt="" style="width: 100%"></a>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-9 d-flex justify-content-center align-items-center">
                         <h2 class="typo-list text-center">INDIAN JOURNAL OF CLINICAL PHARMACY AND MEDICAL SCIENCES</h2>
                     </div>
-                    <div class="col-sm-1">
-                        <div class="float-right">
-                            <div class="header_magazin">
-                                <img src="img/favicon.png" alt="logo">
-                            </div>
+                    <div class="col-sm-1 d-flex justify-content-center align-items-center">
+                        <div class="header_magazin">
+                            <img src="img/favicon.png" alt="logo">
                         </div>
                     </div>
                 </div>
@@ -104,7 +100,7 @@ $totalIssues = mysqli_affected_rows($linkId);
             </nav>
         </div>
         <div class="container mt-3">
-            <h4 class="title_color" style="font-size: 23px; margin-bottom: 10px;">Welcome <?php echo $uname;?></h4>
+            <h4 class="welcome">Welcome <?php echo $uname;?></h4>
         </div>
     </header>
     <!--============= End Header Area ==============-->

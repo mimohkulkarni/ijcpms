@@ -11,19 +11,111 @@ $uname = $_SESSION['user'];
 
 $lblSuccess = "";
 $lblError = "";
+$errorFile = "";
 
 if (isset($_POST['btnAddEditor'])){
     $txtEditorName = $_POST['txtAddEditorName'];
     $txtDesg = $_POST['txtAddDesg'];
     $txtEmail = $_POST['txtAddEmail'];
+    // $file = $_FILES['editor'];
 
+    
     if (!empty($txtEditorName) && !empty($txtDesg) && !empty($txtEmail)){
-        $sqlAddEditor = "INSERT INTO `editor`(`name`, `desg`, `email`) VALUES ('".$txtEditorName."','".$txtDesg."','".$txtEmail."')";
-        mysqli_query($linkId,$sqlAddEditor);
-        if (mysqli_affected_rows($linkId) == 1) $lblSuccess = "Editor Added Successfully";
-        else $lblError = "Editor Addition Unsuccessful";
+
+        try {
+
+
+            // Undefined | Multiple Files | $_FILES Corruption Attack
+            // If this request falls under any of them, treat it invalid.
+            if ( !isset($_FILES['editorFile']['error']) ||
+                is_array($_FILES['editorFile']['error']) ) {
+                throw new RuntimeException('Invalid Image Found.');
+            }
+
+            // Check $_FILES['editorFile']['error'] value.
+            switch ($_FILES['editorFile']['error']) {
+                case UPLOAD_ERR_OK:
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    throw new RuntimeException('No file received.');
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+                    throw new RuntimeException('Exceeded File Size limit.');
+                default:
+                    throw new RuntimeException('Unknown error.');
+            }
+
+            // You should also check filesize here.
+            if ($_FILES['editorFile']['size'] > 2097152) {
+                throw new RuntimeException('Exceeded File size limit.');
+            }
+
+            // DO NOT TRUST $_FILES['editorFile']['mime'] VALUE !!
+            // Check MIME Type by yourself.
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            if (false === $ext = array_search(
+                    $finfo->file($_FILES['editorFile']['tmp_name']),
+                    array(
+                        'jpeg' => 'image/jpeg',
+                        'jpg' => 'image/jpg',
+                        'png' => 'image/png'
+                    ),
+                    true
+                )) {
+                throw new RuntimeException('Invalid file format.');
+            }
+
+            // You should name it uniquely.
+            // DO NOT USE $_FILES['editorFile']['name'] WITHOUT ANY VALIDATION !!
+            // On this example, obtain safe unique name from its binary data.
+            $sha_filename = sha1_file($_FILES['editorFile']['tmp_name']);
+
+            if (file_exists(sprintf('./assets/img/%s.%s', $sha_filename,$ext))){
+                throw new RuntimeException('File already exists.');
+            }
+
+            if (move_uploaded_file( $_FILES['editorFile']['tmp_name'],
+                sprintf('./assets/img/%s.%s', $sha_filename, $ext)
+                )
+            )
+            {
+                $sqlAddEditor = "INSERT INTO `editor`(`name`, `desg`, `email`,`img`) VALUES ('".$txtEditorName."','".$txtDesg."','".$txtEmail."','".$sha_filename.".".$ext."')";
+                mysqli_query($linkId,$sqlAddEditor);
+                if (mysqli_affected_rows($linkId) == 1){
+                     $lblSuccess = "Editor Added Successfully";
+                }
+                else{
+                    $lblError = "Error Adding New Editor";
+                    if(file_exists(sprintf('./assets/imh/%s.%s',$sha_filename,$ext))){
+                        unlink('./assets/img/'.$sha_filename.".".$ext);
+                    }
+                    throw new RuntimeException('Unknown error.');
+                }
+
+            }
+            else{
+                throw new RuntimeException('Failed to upload file.');
+            }
+
+        } catch (RuntimeException $e) {
+
+            $errorFile = ucwords($e->getMessage());
+
+        }
     }
     else $lblError = "All Fields Are Mandatory";
+
+
+
+
+
+    // if (!empty($txtEditorName) && !empty($txtDesg) && !empty($txtEmail)){
+    //     $sqlAddEditor = "INSERT INTO `editor`(`name`, `desg`, `email`) VALUES ('".$txtEditorName."','".$txtDesg."','".$txtEmail."')";
+    //     mysqli_query($linkId,$sqlAddEditor);
+    //     if (mysqli_affected_rows($linkId) == 1) $lblSuccess = "Editor Added Successfully";
+    //     else $lblError = "Editor Addition Unsuccessful";
+    // }
+    // else $lblError = "All Fields Are Mandatory";
 }
 
 if (isset($_POST['btnDeleteEditor'])) {
@@ -31,7 +123,7 @@ if (isset($_POST['btnDeleteEditor'])) {
 //    $txtDesc = $_POST['txtDeleteDesc'];
 //    $txtEmail = $_POST['txtDeleteEmail'];
     $txtDeleteEditorId = $_POST['txtDeleteEditorId'];
-    echo $txtDeleteEditorId;
+    // echo $txtDeleteEditorId;
 
     if (!empty($txtDeleteEditorId)) {
         $sqlDeleteEditor = "DELETE FROM `editor` WHERE `id` = '" . $txtDeleteEditorId . "'";
@@ -65,23 +157,19 @@ if (isset($_POST['btnDeleteEditor'])) {
     <body>
 
         <!--================Header Area =================-->
-        <header class="header_area" style="background: #222222; margin-bottom: 20px">
+        <header class="admin_header">
             <div class="logo_part">
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm-1">
-                            <div class="float-left">
-                                <a class="logo" href="#"><img src="img/favicon.png" alt=""></a>
-                            </div>
+                        <div class="col-sm-2 d-flex justify-content-center align-items-center">
+                                <a class="logo" href="index.php"><img src="img/logo.png" alt="" style="width: 100%"></a>
                         </div>
-                        <div class="col-sm-10">
+                        <div class="col-sm-9 d-flex justify-content-center align-items-center">
                             <h2 class="typo-list text-center">INDIAN JOURNAL OF CLINICAL PHARMACY AND MEDICAL SCIENCES</h2>
                         </div>
-                        <div class="col-sm-1">
-                            <div class="float-right">
-                                <div class="header_magazin">
-                                    <img src="img/favicon.png" alt="logo">
-                                </div>
+                        <div class="col-sm-1 d-flex justify-content-center align-items-center">
+                            <div class="header_magazin">
+                                <img src="img/favicon.png" alt="logo">
                             </div>
                         </div>
                     </div>
@@ -117,7 +205,7 @@ if (isset($_POST['btnDeleteEditor'])) {
                 </nav>
             </div>
             <div class="container mt-3">
-                <h4 class="title_color" style="font-size: 23px; margin-bottom: 10px;">Welcome <?php echo $uname;?></h4>
+                <h4 class="welcome">Welcome <?php echo $uname;?></h4>
             </div>
         </header>
         <!--============= End Header Area ==============-->
@@ -135,7 +223,7 @@ if (isset($_POST['btnDeleteEditor'])) {
                                     <div class="card-header bg-primary text-white"><i class="fa fa-envelope"></i> <span id="spanTitle">Add Editor</span>
                                     </div>
                                     <div class="card-body">
-                                        <form action="addeditor.php" method="post">
+                                        <form action="addeditor.php" method="post" enctype="multipart/form-data">
                                             <?php
                                             if (!empty($lblSuccess)) {
                                                 ?>
@@ -166,6 +254,15 @@ if (isset($_POST['btnDeleteEditor'])) {
                                                 <div class="form-group">
                                                     <label for="txtAddEmail">Editor's Email Address</label>
                                                     <input type="email" name="txtAddEmail" placeholder="Enter Email Address" class="form-control" id="txtAddEmail" required/>
+                                                </div>
+                                                <div class="form-group">    
+                                                    <label for="name">Editor Photo</label>
+                                                    <div class="custom-file">
+                                                        <input type="file" name="editorFile" class="custom-file-input" id="editorFIle">
+                                                        <label class="custom-file-label" for="editorFile">Choose file</label>
+                                                    </div>
+                                                    <label class="text-danger"><?php echo $errorFile; ?></label>
+                                                    <small class="form-text text-muted">Only image files allowed.<br>Max size is 2 MB.</small>
                                                 </div>
                                                 <div class="mx-auto">
                                                     <button type="submit" name="btnAddEditor" class="btn btn-primary text-center">Submit</button>
@@ -234,6 +331,12 @@ if (isset($_POST['btnDeleteEditor'])) {
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
         <script src="js/autocompleteeditor.js"></script>
         <script src="js/adddeletehideshow.js"></script>
+        <script>
+            $(".custom-file-input").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            });
+        </script>
 
     </body>
 </html>

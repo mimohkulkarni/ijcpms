@@ -80,7 +80,7 @@ require_once("user_header.php");
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <a class="dropdown-item" href="aboutus.php">About Us</a>
-                                            <a class="dropdown-item" href="page_404.php">Editorial Board</a>
+                                            <a class="dropdown-item" href="editorial.php">Editorial Board</a>
                                         </div>
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="guidelines.php">Guidelines</a></li>

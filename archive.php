@@ -109,7 +109,7 @@ $totalIssues = mysqli_affected_rows($linkId);
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <a class="dropdown-item" href="aboutus.php">About Us</a>
-                                            <a class="dropdown-item" href="page_404.php">Editorial Board</a>
+                                            <a class="dropdown-item" href="editorial.php">Editorial Board</a>
                                         </div>
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="guidelines.php">Guidelines</a></li>
@@ -158,18 +158,21 @@ $totalIssues = mysqli_affected_rows($linkId);
                         <div class="latest_news">
                             <div class="f_title">
                                 <?php
-                                while ($rowIssueYear = mysqli_fetch_array($resultIssueYear)){
-                                    $sqlIssues = "SELECT * FROM `issues` WHERE year(`date`) = '".$rowIssueYear['year']."' ORDER BY `issue_no` DESC";
-                                    $resultIssues = mysqli_query($linkId,$sqlIssues);
-                                    ?>
-                                    <h2><?php echo  $rowIssueYear['year']; ?></h2>
-                                    <?php
-                                    while ($rowIssues = mysqli_fetch_array($resultIssues)){
+                                if(mysqli_num_rows($resultIssueYear) > 1){
+                                    while ($rowIssueYear = mysqli_fetch_array($resultIssueYear)){
+                                        $sqlIssues = "SELECT * FROM `issues` WHERE year(`date`) = '".$rowIssueYear['year']."' ORDER BY `issue_no` DESC";
+                                        $resultIssues = mysqli_query($linkId,$sqlIssues);
                                         ?>
-<!--                                        <h4><a href="issue.php?d=--><?php //echo $rowIssues['id']; ?><!--"> Issue --><?php //echo $rowIssues['issue_no'];
-                                        echo "<h4><a href='issue.php?d=".$rowIssues['id']."'> Vol ".$rowIssues['vol']." Issue ".$rowIssues['issue_no']. " (".date('M-Y',strtotime($rowIssues['date'])).")</h4>";
+                                        <h2><?php echo  $rowIssueYear['year']; ?></h2>
+                                        <?php
+                                        while ($rowIssues = mysqli_fetch_array($resultIssues)){
+                                            ?>
+    <!--                                        <h4><a href="issue.php?d=--><?php //echo $rowIssues['id']; ?><!--"> Issue --><?php //echo $rowIssues['issue_no'];
+                                            echo "<h4><a href='issue.php?d=".$rowIssues['id']."'> Vol ".$rowIssues['vol']." Issue ".$rowIssues['issue_no']. " (".date('M-Y',strtotime($rowIssues['date'])).")</h4>";
+                                        }
                                     }
                                 }
+                                else echo "<h4>No Issues Available</h4>"
                                 ?>
                             </div>
                         </div>
@@ -183,7 +186,7 @@ $totalIssues = mysqli_affected_rows($linkId);
                                 <ul class="list">
                                     <li><a href="#"><i class="fa fa-envelope"></i> Total Issues <span><?php echo $totalIssues;?></span></a></li>
                                     <li><a href="#"><i class="fa fa-bookmark"></i> Total Articles <span><?php echo $totalArticles; ?></span></a></li>
-                                    <li><a href="#"><i class="fa fa-upload"></i> Current Issue <span><?php echo date("M-Y",strtotime($currentDate));?></span></a></li>
+                                    <li><a href="#"><i class="fa fa-upload"></i> Current Issue <span><?php echo (trim($currentDate) != "00-00-0000") ? date("M-Y",strtotime($currentDate)) : 'NA';?></span></a></li>
                                     <li><a href="#"><i class="fa fa-file-download"></i> Download Score <span><?php echo $dcount;?></span></a></li>
                                 </ul>
                             </aside>

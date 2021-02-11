@@ -5,7 +5,7 @@
  * Date: 14/10/2020
  * Time: 12:09 PM
  */
-
+require_once("user_header.php");
 if($_GET['d'] == null){
     header("location:page_404.php");
 }
@@ -56,7 +56,7 @@ else{
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="img/favicon.png" type="image/png">
-        <title>IJCPMS - About</title>
+        <title>IJCPMS - Issue</title>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
               integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -73,7 +73,7 @@ else{
             <div class="top_menu">
                 <div class="container">
                     <div class="float-left">
-                        <a href="#">Wednesday, March 14, 2018</a>
+                        <a href="#"><?php echo $today;?></a>
                     </div>
                     <div class="float-right">
                         <ul class="list header_social">
@@ -127,7 +127,7 @@ else{
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <a class="dropdown-item" href="aboutus.php">About Us</a>
-                                            <a class="dropdown-item" href="page_404.php">Editorial Board</a>
+                                            <a class="dropdown-item" href="editorial.php">Editorial Board</a>
                                         </div>
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="guidelines.php">Guidelines</a></li>

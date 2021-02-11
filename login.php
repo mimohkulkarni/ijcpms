@@ -14,7 +14,10 @@ if (isset($_POST["BTNlogin"])){
     $uname = preg_replace("/[^A-Za-z0-9@.\-\']/", '', $_POST["username"]);
     $pass = preg_replace("/[^A-Za-z0-9@.\-\']/", '', $_POST["pass"]);
 
-    $sqlLogin = "SELECT `username` FROM `admin` WHERE  `username` = '".$uname ."' AND `pass` = '".$pass."'";
+    $uname = mysqli_real_escape_string($linkId,$uname);
+    $pass = mysqli_real_escape_string($linkId,$pass);
+
+    $sqlLogin = "SELECT `username` FROM `admin` WHERE  `username` = '".$uname."' AND `pass` = '".$pass."'";
     mysqli_query($linkId,$sqlLogin);
     //echo $sqlLogin;
     if (mysqli_affected_rows($linkId) == 1){
@@ -47,23 +50,19 @@ if (isset($_POST["BTNlogin"])){
     <body>
 
     <!--============= Start Header Menu Area ==============-->
-    <header class="header_area" style="background: #222222">
+    <header class="admin_header">
         <div class="logo_part">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-2">
-                        <div class="float-left">
+                    <div class="col-sm-2 d-flex justify-content-center align-items-center">
                             <a class="logo" href="index.php"><img src="img/logo.png" alt="" style="width: 100%"></a>
-                        </div>
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-9 d-flex justify-content-center align-items-center">
                         <h2 class="typo-list text-center">INDIAN JOURNAL OF CLINICAL PHARMACY AND MEDICAL SCIENCES</h2>
                     </div>
-                    <div class="col-sm-1">
-                        <div class="align-middle">
-                            <div class="header_magazin">
-                                <img src="img/favicon.png" alt="logo">
-                            </div>
+                    <div class="col-sm-1 d-flex justify-content-center align-items-center">
+                        <div class="header_magazin">
+                            <img src="img/favicon.png" alt="logo">
                         </div>
                     </div>
                 </div>
@@ -91,7 +90,7 @@ if (isset($_POST["BTNlogin"])){
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="aboutus.php">About Us</a>
-                                        <a class="dropdown-item" href="page_404.php">Editorial Board</a>
+                                        <a class="dropdown-item" href="editorial.php">Editorial Board</a>
                                     </div>
                                 </li>
                                 <li class="nav-item"><a class="nav-link" href="guidelines.php">Guidelines</a></li>
@@ -136,12 +135,12 @@ if (isset($_POST["BTNlogin"])){
                             ?>
                             <tr>
                                 <td>
-                                    <input type="text" name="username" value="admin" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'" required class="single-input">
+                                    <input type="text" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'" required class="single-input">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="password" name="pass" value="123" placeholder="Password" onblur="this.placeholder = 'Password'" required class="single-input">
+                                    <input type="password" name="pass" placeholder="Password" onblur="this.placeholder = 'Password'" required class="single-input">
                                 </td>
                             </tr>
                             <tr>

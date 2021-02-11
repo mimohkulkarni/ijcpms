@@ -1,11 +1,10 @@
 <?php
 require_once("user_header.php");
 require_once("dbconn.php");
-
-
 ?>
 <!doctype html>
 <html lang="en">
+    
     <head>
         <!-- Meta tags -->
         <meta charset="utf-8">
@@ -21,6 +20,10 @@ require_once("dbconn.php");
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
+        <script>
+            if(new Date("Feb 15, 2021 12:00:00").getTime() > new Date().getTime() && 
+                new Date("Feb 13, 2021 00:00:00").getTime() < new Date().getTime()) window.location.href = "welcome.html";
+        </script>
     </head>
     <body>
         
@@ -83,7 +86,7 @@ require_once("dbconn.php");
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <a class="dropdown-item" href="aboutus.php">About Us</a>
-                                            <a class="dropdown-item" href="page_404.php">Editorial Board</a>
+                                            <a class="dropdown-item" href="editorial.php">Editorial Board</a>
                                         </div>
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="guidelines.php">Guidelines</a></li>

@@ -134,6 +134,26 @@ button:focus {
   z-index: 3;
 }
 
+.admin_header{
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  background-color: #958f76;
+  margin-bottom: 20px;
+}
+
+.welcome{
+  color:black;
+  font-size: 23px; 
+  margin-bottom: 10px;
+}
+
+.admin_header + section, .admin_header + div {
+  margin-top: 200px;
+}
+
 .header_area + section, .header_area + div {
   margin-top: 200px;
 }
@@ -2269,6 +2289,7 @@ button:focus {
 
 .typo-list {
   margin-bottom: 10px;
+  color: black;
 }
 
 @media (max-width: 767px) {
@@ -4201,6 +4222,10 @@ h6 {
 
 .f_social_wd .f_social a:last-child {
   margin-right: 0px;
+}
+
+.table-middle td,.table-middle th{
+  vertical-align: middle;
 }
 
 /*---------------------------------------------------- */
