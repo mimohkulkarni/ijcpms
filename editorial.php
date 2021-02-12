@@ -183,20 +183,26 @@ img {
                                 <div class="col-lg-2"></div>
                                 <div class="col-lg-8 text-center">
                                     <img src="img/files/pdc_photo.jpg" width="150px">
-                                    <h4 class="text-info pt-3" style="text-decoration: underline">Editorial In Chief</h4>
+                                    <h4 class="text-info pt-3">Editorial In Chief</h4>
                                     <h4 class="text-default pt-1">Dr. Praveen D. Chaudhari</h4>
+                                    <h4 class="text-default pt-1">pdchaudhari21@rediffmail.com</h4>
                                 </div>
                                 <div class="col-lg-2"></div>
                             </div>
                             <hr>
                             <div class="row mt-2">
-                                <div class="col-lg-2"></div>
-                                <div class="col-lg-8 text-center">
-                                    <img src="img/files/pdc_photo.jpg" width="150px">
-                                    <h4 class="text-info pt-3" style="text-decoration: underline">Assosiate Editor</h4>
-                                    <h4 class="text-default pt-1">Editorial Name</h4>
+                                <div class="col-lg-6 text-center">
+                                    <img src="img/files/assistantEditor1.jpg" width="150px">
+                                    <h4 class="text-info pt-3">Assistant Editor</h4>
+                                    <h4 class="text-default pt-1">Dr.Vinayak Ghayal</h4>
+                                    <h4 class="text-default pt-1">vin1994@gmail.com</h4>
                                 </div>
-                                <div class="col-lg-2"></div>
+                                <div class="col-lg-6 text-center">
+                                    <img src="img/files/assistantEditor2.jpg" width="150px">
+                                    <h4 class="text-info pt-3">Assistant Editor</h4>
+                                    <h4 class="text-default pt-1">Dr.Khadija Aurangabadi</h4>
+                                    <h4 class="text-default pt-1">khadija.aurangabadi93@gmail.com</h4>
+                                </div>
                             </div>
                             <hr>
                             <div class="row mt-4">

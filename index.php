@@ -20,10 +20,6 @@ require_once("dbconn.php");
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
-        <script>
-            if(new Date("Feb 15, 2021 12:00:00").getTime() > new Date().getTime() && 
-                new Date("Feb 13, 2021 00:00:00").getTime() < new Date().getTime()) window.location.href = "welcome.html";
-        </script>
     </head>
     <body>
         

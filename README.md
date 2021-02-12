@@ -3,4 +3,4 @@ This website development services is a legally binding agreement between Mimoh K
 
 Any other uses of this codes of this website are not allowed.
 
-This website is licensed Copyright @2020 by Mimoh Kulkarni.
+This website is licensed Copyright @2021 by Mimoh Kulkarni.

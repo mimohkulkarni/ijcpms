@@ -86,7 +86,7 @@ if (isset($_POST['btnAddEditor'])){
                 }
                 else{
                     $lblError = "Error Adding New Editor";
-                    if(file_exists(sprintf('./assets/imh/%s.%s',$sha_filename,$ext))){
+                    if(file_exists(sprintf('./assets/img/%s.%s',$sha_filename,$ext))){
                         unlink('./assets/img/'.$sha_filename.".".$ext);
                     }
                     throw new RuntimeException('Unknown error.');
@@ -104,32 +104,29 @@ if (isset($_POST['btnAddEditor'])){
         }
     }
     else $lblError = "All Fields Are Mandatory";
-
-
-
-
-
-    // if (!empty($txtEditorName) && !empty($txtDesg) && !empty($txtEmail)){
-    //     $sqlAddEditor = "INSERT INTO `editor`(`name`, `desg`, `email`) VALUES ('".$txtEditorName."','".$txtDesg."','".$txtEmail."')";
-    //     mysqli_query($linkId,$sqlAddEditor);
-    //     if (mysqli_affected_rows($linkId) == 1) $lblSuccess = "Editor Added Successfully";
-    //     else $lblError = "Editor Addition Unsuccessful";
-    // }
-    // else $lblError = "All Fields Are Mandatory";
 }
 
+
 if (isset($_POST['btnDeleteEditor'])) {
-//    $txtEditorName = $_POST['txtEditor'];
-//    $txtDesc = $_POST['txtDeleteDesc'];
-//    $txtEmail = $_POST['txtDeleteEmail'];
     $txtDeleteEditorId = $_POST['txtDeleteEditorId'];
-    // echo $txtDeleteEditorId;
 
     if (!empty($txtDeleteEditorId)) {
-        $sqlDeleteEditor = "DELETE FROM `editor` WHERE `id` = '" . $txtDeleteEditorId . "'";
-        mysqli_query($linkId, $sqlDeleteEditor);
+        $sqlSelectEditor = "SELECT `img` FROM `editor` WHERE `id` = '" . $txtDeleteEditorId . "'";
+        $resultEditor = mysqli_query($linkId,$sqlSelectEditor);
+        if(mysqli_affected_rows($linkId) == 1){
+            $fileName = null;
+            while($row_Editor = mysqli_fetch_array($resultEditor)){
+                $fileName = $row_Editor['img'];
+            }
+            if(!empty($fileName) && file_exists(sprintf('./assets/img/%s',$fileName))){
+                unlink('./assets/img/'.$fileName);
+            }
+            $sqlDeleteEditor = "DELETE FROM `editor` WHERE `id` = '" . $txtDeleteEditorId . "'";
+            mysqli_query($linkId, $sqlDeleteEditor);
 
-        if (mysqli_affected_rows($linkId) >= 0) $lblSuccess = "Editor Deleted Successfully.";
+            if (mysqli_affected_rows($linkId) >= 0) $lblSuccess = "Editor Deleted Successfully.";
+            else $lblError = "Editor Deletion Unsuccessful.";
+        }
         else $lblError = "Editor Deletion Unsuccessful.";
 
     } else $lblError = "Please Search and Select Editor to Delete";
