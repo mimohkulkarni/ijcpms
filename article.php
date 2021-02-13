@@ -161,7 +161,9 @@ else{
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="guidelines.php">Guidelines</a></li>
                                     <li class="nav-item"><a class="nav-link" href="archive.php">Archive</a></li>
-                                    <li class="nav-item active"><a class="nav-link" href="issue.php?d=<?php echo $currentIssue; ?>">Current Issue</a></li>
+                                    <?php if(!empty($currentIssue)){ ?>
+                                        <li class="nav-item"><a class="nav-link" href="issue.php?d=<?php echo $currentIssue; ?>">Current Issue <span class="blinking align-middle">NEW</span></a></li>
+                                    <?php } ?>
                                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
                                     <li class="nav-item"><a class="nav-link" href="submission.php">Submissions <span class="blinking align-middle">NEW</span></a></li>
                                 </ul>
