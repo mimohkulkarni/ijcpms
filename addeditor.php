@@ -17,90 +17,87 @@ if (isset($_POST['btnAddEditor'])){
     $txtEditorName = $_POST['txtAddEditorName'];
     $txtDesg = $_POST['txtAddDesg'];
     $txtEmail = $_POST['txtAddEmail'];
-    // $file = $_FILES['editor'];
-
+    $isEditor = $_POST['isEditor'];
+    $checkbox = null;
+    if(isset($_POST['checkbox']))
+        $checkbox = $_POST['checkbox'];
     
-    if (!empty($txtEditorName) && !empty($txtDesg) && !empty($txtEmail)){
+    if (!empty($txtEditorName) && !empty($txtDesg) && !empty($txtEmail) && ($isEditor == 1 || $isEditor == 0)){
 
         try {
+            $sha_filename = $ext = "";
 
-
-            // Undefined | Multiple Files | $_FILES Corruption Attack
-            // If this request falls under any of them, treat it invalid.
-            if ( !isset($_FILES['editorFile']['error']) ||
-                is_array($_FILES['editorFile']['error']) ) {
-                throw new RuntimeException('Invalid Image Found.');
-            }
-
-            // Check $_FILES['editorFile']['error'] value.
-            switch ($_FILES['editorFile']['error']) {
-                case UPLOAD_ERR_OK:
-                    break;
-                case UPLOAD_ERR_NO_FILE:
-                    throw new RuntimeException('No file received.');
-                case UPLOAD_ERR_INI_SIZE:
-                case UPLOAD_ERR_FORM_SIZE:
-                    throw new RuntimeException('Exceeded File Size limit.');
-                default:
-                    throw new RuntimeException('Unknown error.');
-            }
-
-            // You should also check filesize here.
-            if ($_FILES['editorFile']['size'] > 2097152) {
-                throw new RuntimeException('Exceeded File size limit.');
-            }
-
-            // DO NOT TRUST $_FILES['editorFile']['mime'] VALUE !!
-            // Check MIME Type by yourself.
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            if (false === $ext = array_search(
-                    $finfo->file($_FILES['editorFile']['tmp_name']),
-                    array(
-                        'jpeg' => 'image/jpeg',
-                        'jpg' => 'image/jpg',
-                        'png' => 'image/png'
-                    ),
-                    true
-                )) {
-                throw new RuntimeException('Invalid file format.');
-            }
-
-            // You should name it uniquely.
-            // DO NOT USE $_FILES['editorFile']['name'] WITHOUT ANY VALIDATION !!
-            // On this example, obtain safe unique name from its binary data.
-            $sha_filename = sha1_file($_FILES['editorFile']['tmp_name']);
-
-            if (file_exists(sprintf('./assets/img/%s.%s', $sha_filename,$ext))){
-                throw new RuntimeException('File already exists.');
-            }
-
-            if (move_uploaded_file( $_FILES['editorFile']['tmp_name'],
-                sprintf('./assets/img/%s.%s', $sha_filename, $ext)
-                )
-            )
-            {
-                $sqlAddEditor = "INSERT INTO `editor`(`name`, `desg`, `email`,`img`) VALUES ('".$txtEditorName."','".$txtDesg."','".$txtEmail."','".$sha_filename.".".$ext."')";
-                mysqli_query($linkId,$sqlAddEditor);
-                if (mysqli_affected_rows($linkId) == 1){
-                     $lblSuccess = "Editor Added Successfully";
-                }
-                else{
-                    $lblError = "Error Adding New Editor";
-                    if(file_exists(sprintf('./assets/img/%s.%s',$sha_filename,$ext))){
-                        unlink('./assets/img/'.$sha_filename.".".$ext);
-                    }
-                    throw new RuntimeException('Unknown error.');
+            if($checkbox == null){
+                // Undefined | Multiple Files | $_FILES Corruption Attack
+                // If this request falls under any of them, treat it invalid.
+                if (isset($_FILES['editorFile']['error']) &&
+                    is_array($_FILES['editorFile']['error']) ) {
+                    throw new RuntimeException('Invalid Image Found.');
                 }
 
+                // Check $_FILES['editorFile']['error'] value.
+                switch ($_FILES['editorFile']['error']) {
+                    case UPLOAD_ERR_OK:
+                        break;
+                    case UPLOAD_ERR_INI_SIZE:
+                    case UPLOAD_ERR_FORM_SIZE:
+                        throw new RuntimeException('Exceeded File Size limit.');
+                    default:
+                        throw new RuntimeException('Unknown error.');
+                }
+
+                // You should also check filesize here.
+                if ($_FILES['editorFile']['size'] > 2097152) {
+                    throw new RuntimeException('Exceeded File size limit.');
+                }
+
+                // DO NOT TRUST $_FILES['editorFile']['mime'] VALUE !!
+                // Check MIME Type by yourself.
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                if (false === $ext = array_search(
+                        $finfo->file($_FILES['editorFile']['tmp_name']),
+                        array(
+                            'jpeg' => 'image/jpeg',
+                            'jpg' => 'image/jpg',
+                            'png' => 'image/png'
+                        ),
+                        true
+                    )) {
+                    throw new RuntimeException('Invalid file format.');
+                }
+
+                // You should name it uniquely.
+                // DO NOT USE $_FILES['editorFile']['name'] WITHOUT ANY VALIDATION !!
+                // On this example, obtain safe unique name from its binary data.
+                $sha_filename = sha1_file($_FILES['editorFile']['tmp_name']);
+
+                if (file_exists(sprintf('./assets/img/%s.%s', $sha_filename,$ext))){
+                    throw new RuntimeException('File already exists.');
+                }
+
+            }
+
+            $fileName = "default.png";
+            if($checkbox == null){
+                $fileName = $sha_filename.".".$ext;
+                if(!move_uploaded_file($_FILES['editorFile']['tmp_name'],sprintf('./assets/img/%s.%s', $sha_filename,$ext)))
+                    throw new RuntimeException('Failed to upload file.');
+            }
+            $sqlAddEditor = "INSERT INTO `editor`(`name`, `desg`, `email`,`img`,`editor`) VALUES ('".$txtEditorName."','".$txtDesg."','".$txtEmail."','".$fileName."','".$isEditor."')";
+            mysqli_query($linkId,$sqlAddEditor);
+            if (mysqli_affected_rows($linkId) == 1){
+                $lblSuccess = "Editor Added Successfully";
             }
             else{
-                throw new RuntimeException('Failed to upload file.');
+                $lblError = "Error Adding New Editor";
+                if($checkbox == null && file_exists(sprintf('./assets/img/%s',$fileName))){
+                    unlink('./assets/img/'.$fileName);
+                }
+                throw new RuntimeException('Unknown error.');
             }
 
         } catch (RuntimeException $e) {
-
             $errorFile = ucwords($e->getMessage());
-
         }
     }
     else $lblError = "All Fields Are Mandatory";
@@ -118,7 +115,7 @@ if (isset($_POST['btnDeleteEditor'])) {
             while($row_Editor = mysqli_fetch_array($resultEditor)){
                 $fileName = $row_Editor['img'];
             }
-            if(!empty($fileName) && file_exists(sprintf('./assets/img/%s',$fileName))){
+            if(!empty($fileName) && $fileName != "default.png" && file_exists(sprintf('./assets/img/%s',$fileName))){
                 unlink('./assets/img/'.$fileName);
             }
             $sqlDeleteEditor = "DELETE FROM `editor` WHERE `id` = '" . $txtDeleteEditorId . "'";
@@ -166,7 +163,7 @@ if (isset($_POST['btnDeleteEditor'])) {
                         </div>
                         <div class="col-sm-1 d-flex justify-content-center align-items-center">
                             <div class="header_magazin">
-                                <img src="img/favicon.png" alt="logo">
+                                <img src="img/favicon1.png" alt="logo">
                             </div>
                         </div>
                     </div>
@@ -230,13 +227,13 @@ if (isset($_POST['btnDeleteEditor'])) {
                                                 <?php
                                                 $lblSuccess = "";
                                             }
-                                            if (!empty($lblSuccess)) {
+                                            if (!empty($lblError)) {
                                                 ?>
                                                 <div class="alert alert-danger mb-3">
                                                     <strong><?php echo $lblError; ?></strong>
                                                 </div>
                                                 <?php
-                                                $lblSuccess = "";
+                                                $lblError = "";
                                             }
                                             ?>
                                             <div id="addDiv">
@@ -252,18 +249,30 @@ if (isset($_POST['btnDeleteEditor'])) {
                                                     <label for="txtAddEmail">Editor's Email Address</label>
                                                     <input type="email" name="txtAddEmail" placeholder="Enter Email Address" class="form-control" id="txtAddEmail" required/>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="isEditor">Select Title</label>
+                                                    <select class="form-control" name="isEditor">
+                                                    <option value="1" selected>Editor</option>
+                                                    <option value="0">Reviewer</option>
+                                                    </select>
+                                                </div>
                                                 <div class="form-group">    
                                                     <label for="name">Editor Photo</label>
                                                     <div class="custom-file">
                                                         <input type="file" name="editorFile" class="custom-file-input" id="editorFIle">
                                                         <label class="custom-file-label" for="editorFile">Choose file</label>
                                                     </div>
+                                                    <div class="form-check mt-2">
+                                                        <input type="checkbox" class="form-check-input" name="checkbox" id="checkbox">
+                                                        <label class="form-check-label" for="checkbox">Choose Default</label>
+                                                    </div>
                                                     <label class="text-danger"><?php echo $errorFile; ?></label>
                                                     <small class="form-text text-muted">Only image files allowed.<br>Max size is 2 MB.</small>
                                                 </div>
+                                                <div class="form-group">
+                                                </div>
                                                 <div class="mx-auto">
                                                     <button type="submit" name="btnAddEditor" class="btn btn-primary text-center">Submit</button>
-                                                    <button type="button" class="btn btn-danger text-center ml-2">Reset</button>
                                                 </div>
                                                 <div class="mx-auto mt-2">
                                                     <button type="button" id="btnDeleteSwitch" class="btn btn-warning text-center">Switch To Delete Editor <i class="fa fa-long-arrow-right"></i></button>
@@ -305,8 +314,9 @@ if (isset($_POST['btnDeleteEditor'])) {
                                     <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Instructions</div>
                                     <div class="card-body">
                                         <p>In add New Editor Section all fields are mandatory for adding editor.</p>
+                                        <p>Editor photo is not mandatory, but if no image available please select 'Choose Default'.</p>
                                         <p>In delete Editor Section search and select an editor.</p>
-                                        <p>Editor must be submitted first in order to find it.</p>
+                                        <p>Editor should exist first in order to find it.</p>
                                         <p>In Editor Delete Section Designation and Email fields are non-editable.</p>
                                         <p>In order to edit Edior Details delete that editor and re-create it again.</p>
                                         <p class="text-danger">If you delete an editor it will be permanently deleted</p>
@@ -334,6 +344,13 @@ if (isset($_POST['btnDeleteEditor'])) {
                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
             });
         </script>
-
+        <script>
+            $('#checkbox').change(function(){
+                const checkbox = $('#checkbox').is(":checked");
+                // alert(checkbox);
+                if(checkbox) $('#editorFIle').attr('disabled',true);
+                else $('#editorFIle').attr('disabled',false);
+            });
+        </script>
     </body>
 </html>

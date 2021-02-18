@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 11, 2021 at 02:04 PM
+-- Generation Time: Feb 18, 2021 at 05:57 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -111,6 +111,7 @@ CREATE TABLE `editor` (
   `desg` varchar(500) NOT NULL,
   `email` varchar(50) NOT NULL,
   `img` varchar(100) NOT NULL,
+  `editor` int(1) NOT NULL DEFAULT 1,
   `stmp` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -118,12 +119,13 @@ CREATE TABLE `editor` (
 -- Dumping data for table `editor`
 --
 
-INSERT INTO `editor` (`id`, `name`, `desg`, `email`, `img`, `stmp`) VALUES
-(1, 'Dr. Mourya V. S', 'Principal, Government  College of Pharmacy, Aurangabad', 'vkmourya@gmail.com', '', '2021-02-11 00:00:00'),
-(2, 'Dr. Khadabadi S. S', 'Principal, Govt. College of Pharmacy, Kathora Naka Amravati', 'khadabadi@yahoo.com', '', '2021-02-11 00:00:00'),
-(4, 'Dr. Mahadik K. R.', 'Principal, Bharti Vidyapeeth University, Poona College of Pharmacy, Erandwane, Pune ', 'krmahadik@gmail.com', '', '2021-02-11 00:00:00'),
-(5, 'Dr. Mahadik K. R.', 'Principal, Bharti Vidyapeeth University, Poona College of Pharmacy, Erandwane, Pune ', 'mimohkulkarni17@gmail.com', '', '2021-02-11 00:00:00'),
-(6, 'Dr. Mahadik K. R.', 'Principal, Bharti Vidyapeeth University, Poona College of Pharmacy, Erandwane, Pune ', 'mimohkulkarni17@gmail.com', 'a4a3ed14bdf11811905ca499ba2c94b7ec81c64c.jpeg', '2021-02-11 16:49:45');
+INSERT INTO `editor` (`id`, `name`, `desg`, `email`, `img`, `editor`, `stmp`) VALUES
+(1, 'Dr. Mourya V. S', 'Principal, Government  College of Pharmacy, Aurangabad', 'vkmourya@gmail.com', '', 0, '2021-02-11 00:00:00'),
+(2, 'Dr. Khadabadi S. S', 'Principal, Govt. College of Pharmacy, Kathora Naka Amravati', 'khadabadi@yahoo.com', '', 0, '2021-02-11 00:00:00'),
+(4, 'Dr. Mahadik K. R.', 'Principal, Bharti Vidyapeeth University, Poona College of Pharmacy, Erandwane, Pune ', 'krmahadik@gmail.com', '', 0, '2021-02-11 00:00:00'),
+(23, 'Dr. Mahadik K. R.1', 'Principal, Bharti Vidyapeeth University, Poona College of Pharmacy, Erandwane, Pune ', 'mimohkulkarni17@gmail.com', 'default.png', 1, '2021-02-18 10:12:11'),
+(24, 'Dr. Mahadik K. R.11', 'Principal, Bharti Vidyapeeth University, Poona College of Pharmacy, Erandwane, Pune ', 'mimohkulkarni17@gmail.com', 'default.png', 0, '2021-02-18 10:12:53'),
+(25, 'Dr. Mahadik K. R.', 'Principal, Bharti Vidyapeeth University, Poona College of Pharmacy, Erandwane, Pune ', 'mimohkulkarni17@gmail.com', '4d498f487236e29f3d8af72dcae4550f4aec0bc2.png', 1, '2021-02-18 10:20:40');
 
 -- --------------------------------------------------------
 
@@ -261,7 +263,7 @@ ALTER TABLE `articles`
 -- AUTO_INCREMENT for table `editor`
 --
 ALTER TABLE `editor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `issues`

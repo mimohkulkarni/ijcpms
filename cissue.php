@@ -64,7 +64,7 @@ if (isset($_POST['submit'])){
                     </div>
                     <div class="col-sm-1 d-flex justify-content-center align-items-center">
                         <div class="header_magazin">
-                            <img src="img/favicon.png" alt="logo">
+                            <img src="img/favicon1.png" alt="logo">
                         </div>
                     </div>
                 </div>

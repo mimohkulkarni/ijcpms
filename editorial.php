@@ -14,8 +14,11 @@ $sqlIssues = "SELECT `id` FROM `issues`";
 mysqli_query($linkId,$sqlIssues);
 $totalIssues = mysqli_affected_rows($linkId);
 
-$sqlEditor = "SELECT * FROM `editor`";
+$sqlEditor = "SELECT * FROM `editor` WHERE `editor` = '1'";
 $resultEditor = mysqli_query($linkId,$sqlEditor);
+
+$sqlReviewer = "SELECT * FROM `editor` WHERE `editor` = '0'";
+$resultReviewer = mysqli_query($linkId,$sqlReviewer);
 
 ?>
 <!doctype html>
@@ -184,7 +187,7 @@ img {
                             <div class="row">
                                 <div class="col-lg-2"></div>
                                 <div class="col-lg-8 text-center">
-                                    <img src="img/files/pdc_photo.jpg" width="150px">
+                                    <img src="img/files/pdc_photo.png" width="150px">
                                     <h4 class="text-info pt-3">Editorial In Chief</h4>
                                     <h4 class="text-default pt-1">Dr. Praveen D. Chaudhari</h4>
                                     <h4 class="text-default pt-1">pdchaudhari21@rediffmail.com</h4>
@@ -194,13 +197,13 @@ img {
                             <hr>
                             <div class="row mt-2">
                                 <div class="col-lg-6 text-center">
-                                    <img src="img/files/assistantEditor1.jpg" width="150px">
+                                    <img src="img/files/assistantEditor1.png" width="150px">
                                     <h4 class="text-info pt-3">Assistant Editor</h4>
                                     <h4 class="text-default pt-1">Dr.Vinayak Ghayal</h4>
-                                    <h4 class="text-default pt-1">vin1994@gmail.com</h4>
+                                    <h4 class="text-default pt-1">vin14994@gmail.com</h4>
                                 </div>
                                 <div class="col-lg-6 text-center">
-                                    <img src="img/files/assistantEditor2.jpg" width="150px">
+                                    <img src="img/files/assistantEditor2.png" width="150px">
                                     <h4 class="text-info pt-3">Assistant Editor</h4>
                                     <h4 class="text-default pt-1">Dr.Khadija Aurangabadi</h4>
                                     <h4 class="text-default pt-1">khadija.aurangabadi93@gmail.com</h4>
@@ -210,6 +213,7 @@ img {
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <?php if(mysqli_num_rows($resultEditor) > 0){ ?>
+                                    <h2 class="text-center">Editors</h2>
                                     <table class="table table-bordered table-hover text-center table-middle">
                                         <thead class="thead-dark">
                                             <tr>
@@ -230,6 +234,37 @@ img {
                                                 echo "<td>".$rowEditor['name']."</td>";
                                                 echo "<td>".$rowEditor['desg']."</td>";
                                                 echo "<td>".$rowEditor['email']."</td>";
+                                                echo "</tr>";
+                                            }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-lg-12">
+                                    <?php if(mysqli_num_rows($resultReviewer) > 0){ ?>
+                                    <h2 class="text-center">Reviewers</h2>
+                                    <table class="table table-bordered table-hover text-center table-middle">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="align-middle" style="min-width: 70px">Sr No</th>
+                                                <!-- <th class="align-middle">Image</th> -->
+                                                <th class="align-middle">Reviewer Name</th>
+                                                <th class="align-middle">Designation</th>
+                                                <th class="align-middle">Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            $i = 1;
+                                            while($rowReviewer = mysqli_fetch_array($resultReviewer)){
+                                                echo "<tr>";
+                                                echo "<td>".$i++."</td>";
+                                                echo "<td>".$rowReviewer['name']."</td>";
+                                                echo "<td>".$rowReviewer['desg']."</td>";
+                                                echo "<td>".$rowReviewer['email']."</td>";
                                                 echo "</tr>";
                                             }
                                         ?>
