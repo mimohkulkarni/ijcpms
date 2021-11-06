@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" href="img/favicon.png" type="image/png">
+        <title>IJCPMS</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <!-- main css -->
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/responsive.css">
+        <style>
+            body{
+                text-align: center;
+                font-weight: 100;
+            }
+
+            h1{
+                color: #396;
+                font-weight: 100;
+                font-size: 40px;
+                margin: 40px 0px 20px;
+            }
+
+            #clockdiv{
+                font-family: sans-serif;
+                color: #fff;
+                display: inline-block;
+                font-weight: 100;
+                text-align: center;
+                font-size: 30px;
+            }
+
+            #clockdiv > div{
+                padding: 10px;
+                border-radius: 3px;
+                background: #00BF96;
+                display: inline-block;
+            }
+
+            #clockdiv div > span{
+                padding: 15px;
+                border-radius: 3px;
+                background: #00816A;
+                display: inline-block;
+            }
+
+            .smalltext{
+                padding-top: 5px;
+                font-size: 16px;
+            }
+        </style>
+    </head>
+    <body>
+		
+			<section class="sample-text-area">
+				<div class="container">
+                    <img src="./img/logo.png" class="img-responsive" width="400" />
+					<h1 class="text-heading title_color d-flex justify-content-center">INDIAN JOURNAL OF CLINICAL PHARMACY AND MEDICAL SCIENCES</h1>
+                    <h1 class="text-heading title_color d-flex justify-content-center">Wait is over!!! We are going live on 15 Feb 2021, 12 PM.</h1>
+                    <h1>Clear Your Calander and Join Us</h1>
+                    <div id="clockdiv">
+                        <div>
+                            <span class="days"></span>
+                            <div class="smalltext">Days</div>
+                        </div>
+                        <div>
+                            <span class="hours"></span>
+                            <div class="smalltext">Hours</div>
+                        </div>
+                        <div>
+                            <span class="minutes"></span>
+                            <div class="smalltext">Minutes</div>
+                        </div>
+                        <div>
+                            <span class="seconds"></span>
+                            <div class="smalltext">Seconds</div>
+                        </div>
+                    </div>
+				</div>
+			</section>	
+        
+        
+        
+        
+<script>
+  function getTimeRemaining(endtime) {
+  const total = Date.parse(endtime) - Date.parse(new Date());
+  const seconds = Math.floor((total / 1000) % 60);
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(total / (1000 * 60 * 60 * 24));
+  
+  return {
+    total,
+    days,
+    hours,
+    minutes,
+    seconds
+  };
+}
+
+function initializeClock(id, endtime) {
+  const clock = document.getElementById(id);
+  const daysSpan = clock.querySelector('.days');
+  const hoursSpan = clock.querySelector('.hours');
+  const minutesSpan = clock.querySelector('.minutes');
+  const secondsSpan = clock.querySelector('.seconds');
+
+  function updateClock() {
+    const t = getTimeRemaining(endtime);
+
+    daysSpan.innerHTML = t.days;
+    hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+    minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+    secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+    if (t.total <= 0) {
+      clearInterval(timeinterval);
+    }
+  }
+
+  updateClock();
+  const timeinterval = setInterval(updateClock, 1000);
+}
+
+const deadline =new Date("Feb 15, 2021 12:00:00");
+initializeClock('clockdiv', deadline);
+    </script>
+    </body>
+</html>
